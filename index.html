@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Clean Coding Practices using React/JS | Aamir khan</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/blood.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<!-- intro start -->
+			<section>
+				<section>
+					<div class="introBox">
+						<div class="intro">
+							<h2 class="r-fit-text">Aamir khan</h2>
+							<h3 class="r-fit-text">FrontEnd Engineer @ Diagnal</h3>
+							<h3 class="r-fit-text talk-title">Clean Coding Practices using React/JS</h3>
+						</div>
+					</div>
+				</section>
+				<section>
+					<div class="caution">
+						<p>
+							Caution:
+						</p>
+						<ul>
+							<li class="fragment fade-up">
+								All the tricks are not always the best way to do things.
+							</li>
+							<li class="fragment fade-up">
+								and it may not make sense in the Browsers
+							</li>
+							<li class="fragment fade-up">
+								it may not make sense to you (sugeestions are welcome)
+							</li>
+						</ul>
+					</div>
+
+				</section>
+			</section>
+
+			<!-- intro end -->
+
+
+
+			<!-- 1 start -->
+			<section>
+				#1: Avoid Code pollution
+			</section>
+			<section
+				data-background-iframe="https://babeljs.io/repl/#?browsers=defaults%2C%20not%20ie%2011%2C%20not%20ie_mob%2011&build=&builtIns=false&corejs=false&spec=false&loose=false&code_lz=GYVwdgxgLglg9mABDMATApmKiAUUCGARgLwAsAlAN4BQii1AvkA&debug=false&forceAllTransforms=true&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=env%2Creact%2Cstage-3&prettier=false&targets=Node-4&version=7.18.5&externalPlugins=&assumptions=%7B%7D"
+				data-background-interactive>
+			</section>
+			<!-- 1 end-->
+
+
+
+			<!-- 2 start -->
+			<section>
+				<p>
+					#2: Use your tools wisely
+				</p>
+				<ul>
+					<li class="fragment strike highlight-green">Webpack</li>
+					<li class="fragment strike highlight-green">React DevTools</li>
+					<li class="fragment strike highlight-green">Browser DevTools</li>
+					<li class="fragment strike highlight-green">Any of your favorite tool</li>
+				</ul>
+			</section>
+			<!-- 2 end -->
+
+
+			<!-- 3 start -->
+			<section>
+				<section>
+					<p>#3: Recognize Patterns</p>
+					<img src="http://www.graduatewings.co.uk/userfiles/Image/IR%20Shape%20Rotations/inductive_reasoning_tests_shape_conversions_example_2.png"
+						alt="puzzle" />
+				</section>
+
+				<section data-auto-animate>
+					<pre data-id="code-animation"><code data-trim data-noescape class="language-javascript">
+					useEffect(() => {
+						const onChange = () => {
+							const isHidden = document.hidden || document.webkitHidden;
+						};
+					
+						document.addEventListener('visibilitychange', onChange);
+						return () => {
+							document.removeEventListener('visibilitychange', onChange);
+						};
+						}, [somedeps]);
+				</code></pre>
+				</section>
+
+				<section data-auto-animate>
+					<pre data-id="code-animation"><code data-trim data-noescape class="language-javascript">
+						const userEvenListener = (eventName, cb, target) => {
+							useEffect(() => {
+							  target.addEventListener(eventName, cb);
+							  return () => {
+								target.removeEventListener(eventName, cb);
+							  };
+							}, []);
+						  };
+				</code></pre>
+				</section>
+
+				<section data-auto-animate>
+					<pre data-id="code-animation"><code data-trim data-noescape class="language-javascript">
+						useEventListener('visibilitychange', () => {
+							console.log('visibility changed');
+						}, document);
+				</code></pre>
+				</section>
+
+				<section data-auto-animate>
+					<pre data-id="code-animation"><code data-trim data-noescape class="language-javascript">
+						useEventListener('click', () => {
+							console.log('body clicked');
+						}, document.body);
+				</code></pre>
+				</section>
+
+				<section data-auto-animate>
+					<pre data-id="code-animation"><code data-trim data-noescape class="language-javascript">
+						const timer = useRef();
+						useEffect(() => {
+							const handler = () => {
+							clearInterval(timer.current);
+							setIsIdle(false);
+							timer.current = setInterval(() => {
+								setIsIdle(true);
+							}, idleDeps);
+							};
+							addIdleEvents(handler);
+							return () => removeIdleEvents(handler);
+						}, [idleDeps]);
+				</code></pre>
+				</section>
+
+				<section data-auto-animate>
+					<pre data-id="code-animation"><code data-trim data-noescape class="language-javascript">
+						const useInterval = (handler, delay) => {
+							useEffect(() => {
+							  if (delay !== null) {
+								const intervalId = setInterval(handler, delay);
+								return () => clearInterval(intervalId);
+							  }
+							}, [delay]);
+						  };
+				</code></pre>
+				</section>
+
+
+				<section data-auto-animate>
+					<pre data-id="code-animation"><code data-trim data-noescape class="language-javascript">
+						  const [counter, setCounter] = useState(0);
+						  useInterval(() => {
+								setCounter((currentCounter) => currentCounter + 1);
+						  }, 1000);
+				</code></pre>
+				</section>
+
+
+
+				<section>
+					<p>General Patterns</p>
+					<ul>
+						<li>useTimeOut</li>
+						<li>useLocalStorage</li>
+						<li>useDomElement</li>
+						<li>useOnlineStatus</li>
+						<li>and list goest on...</li>
+					</ul>
+				</section>
+
+
+				<section>
+					<p>Project Specific Patterns</p>
+					<pre><code data-trim data-noescape class="language-javascript">
+						const [apiInProgress, setApiInProgress] = useState(false);
+						const [apiData, setData] = useState(null);
+						const [apiError, setError] = useState(null);
+
+						useEffect(() =>{
+							if (apis) {
+								setApiInProgress(true);
+								apis.b2c_subscription_status(...) // some api args
+								.then((res) => {
+									if (res.userStatus) {
+										setData(res.data)
+									}
+									setApiInProgress(false);
+								}).catch((error) => {
+									setApiInProgress(false);
+									setError(error);
+								});
+							} else {
+								setError('no api')
+							}
+						});
+					</code>
+
+					</pre>
+				</section>
+
+				<section data-auto-animate>
+					<pre><code data-trim data-noescape class="language-javascript">
+						const [apiRes, status] = useApiEffect('b2c_subscription_status');
+					</code>
+					</pre>
+				</section>
+
+				<section data-auto-animate>
+					<pre><code data-trim>
+						const [apiRes, status] = useApiEffect('b2c_subscription_status');
+						<button disabled = {status == pending}>
+							{status !== pending ? 'Click me' : 'Loading...'}
+						  </button>
+						  {status == error && <p>Error: {apiRes.error}</p>}
+						  {status == success && <p>Success: {apiRes.data}</p>}
+					</code>
+					</pre>
+				</section>
+			</section>
+			<!-- 3 end -->
+
+
+			<!-- 4 start -->
+			<section>
+				<section>
+					<h4>#4: Pick your hooks carefully</h4>
+				</section>
+				<!-- 4.1 start -->
+				<section>
+					<p>#4.1 You may not need useEffect</p>
+					<small class="fragment">There are two very common cases where you don't need useEffect:</small>
+					<ol>
+						<li class="fragment">Transforming Data for Rendering</li>
+						<li class="fragment">handling user actions</li>
+					</ol>
+				</section>
+
+				<section data-auto-animate="">
+					<p>Transforming Data for Rendering</p>
+					<pre><code data-trim data-line-numbers="3,5-9" class="language-javascript">
+						const Details = (media) =>{
+							const {type} = media;
+							cosnt [isTrailer, setTrailer] = useState(false);
+						
+							useEffect(() =>{
+								if(is.Trailer(type)){
+									setTrailer(true);
+								}
+							},[type]);
+							return isTrailer ? &lt;Trailer/&gt; : &lt;Movie/&gt; ;
+						}
+					</code>
+					</pre>
+					<small class="fragment danger">
+						This is more complicated than necessary and inefficient too,
+						it does an entire render with a stale value,
+						and immediately re-renders with the updated value.
+					</small>
+				</section>
+
+				<section data-auto-animate>
+					<p>Transforming Data for Rendering</p>
+					<pre><code data-trim data-line-numbers="3" class="language-javascript">
+						const Details = (media) =>{
+							const {type} = media;
+							const isTrailer = is.Trailer(type);
+							return isTrailer ? &lt;Trailer/&gt; : &lt;Movie/&gt; ;
+						}
+					</code>
+					</pre>
+					<small class="good">
+						Remove both the state variable and the Effect.
+					</small>
+				</section>
+				<!-- 4.1 end -->
+
+
+				<!-- 4.2 start -->
+				<secion>
+					<p>#4.2 useState should be renamed to usePrimitive</p>
+
+				</secion>
+				<!-- 4.2 end -->
+
+			</section>
+			<!-- 4 end -->
+		</div>
+
+
+		<small class="watermark">
+			Diagnal: Aamir khan
+		</small>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			hash: true,
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+		});
+	</script>
+</body>
+
+</html>
